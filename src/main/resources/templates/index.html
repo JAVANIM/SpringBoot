@@ -1,0 +1,15 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/common :: head}">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4" th:replace="~{fragments/common :: menu('home')}">
+        </nav>
+        <main class="container">
+            <div class="bg-body-tertiary p-5 rounded">
+                <h2>스프링 부트</h2>
+                <p class="lead">웹 페이지 제작</p>
+            </div>
+        </main>
+    </body>
+</html>
