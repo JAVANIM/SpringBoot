@@ -45,16 +45,31 @@
                 </div>
 
                 <p class="text-end">
-                    <button type="submit" class="btn btn-primary">작성</button>
-                    <button sec:authorize="hasRole('ROLE_ADMIN')" type="button" class="btn btn-primary"
-                        th:onclick="|deleteBoard(*{id})|">
-                        삭제
-                    </button>
-<!--                    <button th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or #authentication.principal.id == board.user.id')}"-->
-<!--                            type="button" class="btn btn-primary" th:onclick="|deleteBoard(*{id})|">-->
-<!--                        삭제-->
-<!--                    </button>-->
-                    <a type="reset" class="btn btn-primary" href="/board/list">취소</a>
+                    <!-- board.id가 null이  아닐때 -->
+                    <span th:if="*{id} != null">
+                        <button th:if="${#authorization.expression('hasRole(''ADMIN'')')} or ${userId} == *{user.username}"
+                            type="submit" class="btn btn-primary">수정</button>
+                        <!-- <button sec:authorize="hasRole('ROLE_ADMIN')" type="button" class="btn btn-primary"
+                            th:onclick="|deleteBoard(*{id})|">
+                            삭제
+                        </button> -->
+                        <button th:if="${#authorization.expression('hasRole(''ADMIN'')')} or ${userId} == *{user.username}"
+                            type="button" class="btn btn-primary" th:onclick="|deleteBoard(*{id})|">
+                            삭제
+                        </button>
+                    </span>
+
+                    <!-- board.id가 null일때 글쓰기 -->
+                    <span th:if="*{id} == null">
+                        <button  type="submit" class="btn btn-primary">쓰기</button>                       
+                         <a type="reset" class="btn btn-primary" href="/board/list">취소</a>
+
+                    </span>
+
+                    <!--                    <button th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or #authentication.principal.id == board.user.id')}"-->
+                    <!--                            type="button" class="btn btn-primary" th:onclick="|deleteBoard(*{id})|">-->
+                    <!--                        삭제-->
+                    <!--                    </button>-->
                 </p>
             </form>
         </div>

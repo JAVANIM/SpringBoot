@@ -6,6 +6,7 @@ import com.boot.board_240214.repository.BoardRepository;
 import com.boot.board_240214.service.BoardService;
 import com.boot.board_240214.validator.BoardValidator;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
+import java.security.Principal;
+import java.security.Security;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +33,10 @@ import java.util.Optional;
 @RequestMapping(value = "/board")
 @Slf4j
 public class BoardController {
+//    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//    UserDetails userDetails = (UserDetails)principal;
+//    String username = ((UserDetails) principal).getUsername();
+//    String password = ((UserDetails) principal).getPassword();
 
     @Autowired
     private BoardRepository boardRepository;
@@ -69,8 +77,9 @@ public class BoardController {
     @GetMapping(value = "/form")
 //    public String form(Model model) {
 //    public String form(Model model, @RequestParam Long id) {
-    public String form(Model model, @RequestParam(required = false) Long id) {
+    public String form(Model model, @RequestParam(required = false) Long id, Principal principal) {
         log.info("@# GetMapping form()");
+//        Principal principal  -- 현재 로그인 정보를 가져 오기위한것
 
         if (id == null) {
             model.addAttribute("board", new Board());
@@ -78,7 +87,9 @@ public class BoardController {
 //           Optional<Board> board = boardRepository.findById(id);
               Board board = boardRepository.findById(id).orElse(null);
               model.addAttribute("board",board);
+              model.addAttribute("userId",principal.getName());
         }
+//        Security를 사용 하였을때 현재 접속자 id 를 보내는것
 
         return "board/form";
     }
